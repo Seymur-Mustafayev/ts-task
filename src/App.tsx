@@ -51,7 +51,7 @@ export default function App() {
         <Column dataField="salary" caption="Salary" />
         <Column dataField="lastName" caption="LastName" />
         <Column
-          caption="Actions" ///cellRender-de  Dod danbaxdim
+          caption="Actions" ///cellRender-de  Doc dan baxdim
           cellRender={(data) => (
             <div>
               <button onClick={() => handleRemove(data.data.id)}>Remove</button>
