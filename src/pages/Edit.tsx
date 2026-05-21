@@ -1,11 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { employees } from './data';
-import type { Employee ,Role,Status} from './data';
+import type { Employee ,Role,Status} from '../data';
+import {UserContext} from '../store/users-context';
+import { useContext} from "react";
 
 export default function Edit() {
   const { id } = useParams<{ id: string }>();
+  const { users} = useContext(UserContext);
+   
 
-  const employee = employees.find(emp => emp.id === Number(id));
+  const employee = users.find(emp => emp.id === Number(id));
 
 
   if (!employee) return <div>Employee tapılmadı</div>;
@@ -29,10 +32,10 @@ export default function Edit() {
         country: "",
         avatarUrl: "",
       };
- const existingIndex = employees.findIndex(emp => emp.id === Number(id));
+ const existingIndex = users.findIndex(emp => emp.id === Number(id));
 
 if (existingIndex !== -1) {
-  employees[existingIndex] = editedEmployee; 
+  users[existingIndex] = editedEmployee; 
 }
   window.history.back();
   }

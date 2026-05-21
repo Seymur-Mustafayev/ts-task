@@ -1,14 +1,17 @@
 import type { RefObject } from 'react';
 import './modal.css';
-import type { Employee, Role, Status } from './data';
-import { employees } from './data';
+import type { Employee, Role, Status } from '../data';
+import {UserContext} from '../store/users-context';
+import { useContext} from "react";
 
 interface ModalProps {
   dialogeRef: RefObject<HTMLDialogElement | null>;
-  onAddEmployee: (employee: Employee) => void;
+
 }
 
-export default function Modal({ dialogeRef, onAddEmployee }: ModalProps) {
+export default function Modal({ dialogeRef}: ModalProps) {
+const { addUser} = useContext(UserContext);
+ 
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,8 +35,8 @@ export default function Modal({ dialogeRef, onAddEmployee }: ModalProps) {
       country: "",
       avatarUrl: "",
     };
-onAddEmployee(newEmployee);
-employees.push(newEmployee);
+addUser(newEmployee);
+
     e.currentTarget.reset();
     handleRemoveModal();
   }
