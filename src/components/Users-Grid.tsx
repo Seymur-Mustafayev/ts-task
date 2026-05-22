@@ -25,7 +25,7 @@ export default function UsersGrid() {
 
         <>
             <Modal dialogeRef={modalRef} />
-            <div>
+            <div className='actions'>
                 <label>Search User</label>
                 <input
                     type="text"
@@ -38,7 +38,7 @@ export default function UsersGrid() {
             </div>
 
             <Export />
-x
+
             <table className="table">
                 <thead>
                     <tr>
