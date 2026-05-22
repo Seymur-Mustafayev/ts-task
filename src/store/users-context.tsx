@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 
-import { employees } from "../data";
-import type { Employee } from "../data";
+import { employees } from "../data/data";
+import type { Employee } from "../data/data";
 
 interface UserContextProps {
     users: Employee[];

@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 import './modal.css';
-import type { Employee, Role, Status } from '../data';
+import type { Employee, Role, Status } from '../data/data';
 import {UserContext} from '../store/users-context';
 import { useContext} from "react";
 

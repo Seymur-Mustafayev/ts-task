@@ -21,7 +21,7 @@ export default function App() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => searchInput(e.target.value)}
       />
       <Modal dialogeRef={modalRef}  />
-      <button onClick={handleClick}>Add Employee</button>
+      <button className="add-btn" onClick={handleClick}>Add Employee</button>
       <UsersGrid/>
 
       

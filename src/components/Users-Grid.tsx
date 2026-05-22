@@ -1,116 +1,24 @@
-import { useContext, useState } from "react";
-import { UserContext } from '../store/users-context';
+import { useContext} from "react";
 import { useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import './UsersGrid.css';
+import { FilterContext } from '../store/filter-context.tsx'
+import { UserContext } from '../store/users-context.tsx'
+import Export from '../components/Export'
 
-type SortField = 'id' | 'firstName' | 'lastName' | 'email' | 'salary';
 
-const ITEMS_PER_PAGE = 6;
 
 export default function UsersGrid() {
-
-
+    const { handleRemove } = useContext(UserContext)
+    const {handleSort, handleSortArrow, handleFilterChange,page,setPage,paginatedUsers,totalPages } = useContext(FilterContext)
     const navigate = useNavigate();
-    const { users, handleRemove } = useContext(UserContext);
-    const [sortField, setSortField] = useState<SortField>('id')
-    const [sortArrow, setSortArrow] = useState('asc')
-    const [value, setValue] = useState<string>()
-    const [page, setPage] = useState(1)
+   
 
-
-
-    function handleSort(field: SortField) {
-
-
-        if (sortField === field) {
-            setSortArrow(prev => prev === 'asc' ? 'dsc' : 'asc')
-        }
-        else {
-            setSortField(field)
-            setSortArrow('asc')
-        }
-    }
-
-    function handleFilterChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        setValue(e.target.value)
-
-    }
-
-    const sortedUsers = [...users]
-        .filter((user) => value ? user.role === value : true)
-        .sort((a, b) => {
-            const aVal = a[sortField]
-            const bVal = b[sortField]
-
-            if (aVal > bVal) {
-                return sortArrow === 'asc' ? -1 : 1
-            }
-            if (aVal < bVal) {
-                return sortArrow === 'asc' ? 1 : -1
-            }
-            return 0
-
-
-        })
-
-    function handleSortArrow(field: string) {
-        if (sortField !== field) return ' ↕';
-        return sortArrow === 'asc' ? ' ▲' : ' ▼';
-
-    }
-    const totalPages = Math.ceil(sortedUsers.length / ITEMS_PER_PAGE)
-    const paginatedUsers = sortedUsers.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
-
-    //Export un Hamisini Docdan goturdum
-    // ✅ Excel export
-function exportToExcel() {
-    const data = sortedUsers.map(u => ({
-        ID: u.id,
-        Name: u.firstName,
-        LastName: u.lastName,
-        Email: u.email,
-        Salary: u.salary,
-        Role: u.role
-    }));
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Users');
-    XLSX.writeFile(wb, 'users.xlsx');
-}
-
-// ✅ PDF export
-function exportToPDF() {
-    const doc = new jsPDF();
-    autoTable(doc, {
-        head: [['ID', 'Name', 'LastName', 'Email', 'Salary', 'Role']],
-        body: sortedUsers.map(u => [u.id, u.firstName, u.lastName, u.email, u.salary, u.role])
-    });
-    doc.save('users.pdf');
-}
-
-// ✅ Copy
-    function copyToClipboard() {
-        const text = sortedUsers
-            .map(u => `${u.id}\t${u.firstName}\t${u.lastName}\t${u.email}\t${u.salary}\t${u.role}`)
-            .join('\n');
-        navigator.clipboard.writeText(text);
-        alert('Copied');
-    }
-
-
-
-//Export un Hamisini Docdan goturdum
     return (
 
-        <>
-             <div className="export-buttons">
-            <button onClick={exportToExcel}>Export Excel</button>
-            <button onClick={exportToPDF}>Export PDF</button>
-            <button onClick={copyToClipboard}>Copy</button>
-        </div>
+        <> 
+
+           <Export/>
+           
             <table className="table">
                 <thead>
                     <tr>
@@ -152,7 +60,7 @@ function exportToPDF() {
             </table>
             <div className="pagination">
 
-                 <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+                <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
                     {'<'}
                 </button>
 
