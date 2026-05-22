@@ -1,24 +1,44 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import './UsersGrid.css';
 import { FilterContext } from '../store/filter-context.tsx'
 import { UserContext } from '../store/users-context.tsx'
 import Export from '../components/Export'
+import { useRef } from "react";
+import Modal from "../components/./Modal.tsx"
 
 
 
 export default function UsersGrid() {
-    const { handleRemove } = useContext(UserContext)
-    const {handleSort, handleSortArrow, handleFilterChange,page,setPage,paginatedUsers,totalPages } = useContext(FilterContext)
+    const { handleRemove, search, searchInput } = useContext(UserContext)
+    const { handleSort, handleSortArrow, handleFilterChange, page, setPage, paginatedUsers, totalPages } = useContext(FilterContext)
     const navigate = useNavigate();
-   
+    const modalRef = useRef<HTMLDialogElement>(null);
+
+
+    function handleClick() {
+        modalRef.current?.showModal();
+    }
+
 
     return (
 
-        <> 
+        <>
+            <Modal dialogeRef={modalRef} />
+            <div>
+                <label>Search User</label>
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={search}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => searchInput(e.target.value)}
 
-           <Export/>
-           
+                />
+                <button className="add-btn" onClick={handleClick}>Add Employee</button>
+            </div>
+
+            <Export />
+x
             <table className="table">
                 <thead>
                     <tr>
