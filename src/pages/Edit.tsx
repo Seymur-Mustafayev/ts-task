@@ -2,13 +2,16 @@ import { useParams } from 'react-router-dom';
 import type { Employee ,Role,Status} from '../data/data';
 import { useContext} from "react";
 import {FilterContext} from '../store/filter-context.tsx'
+import {UserContext} from '../store/users-context.tsx'
 
 export default function Edit() {
   const { id } = useParams<{ id: string }>();
   const { sortedUsers} = useContext(FilterContext);
-   
+   const {handleEdit}=useContext(UserContext)
 
   const employee = sortedUsers.find(emp => emp.id === Number(id));
+
+  
 
 
   if (!employee) return <div>Employee tapılmadı</div>;
@@ -32,11 +35,8 @@ export default function Edit() {
         country: "",
         avatarUrl: "",
       };
- const existingIndex = sortedUsers.findIndex(emp => emp.id === Number(id));
 
-if (existingIndex !== -1) {
-  sortedUsers[existingIndex] = editedEmployee; 
-}
+handleEdit(editedEmployee);
   window.history.back();
   }
   return (
